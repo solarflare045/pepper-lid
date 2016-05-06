@@ -1,0 +1,11 @@
+cron:
+  frequency: 00 * * * * *
+
+youtube:
+  apiKey: # your API key here
+  playlistId: # your Playlist ID here
+
+destination: ./music/
+
+ffmpeg:
+  location: D:/ffmpeg/bin/ffmpeg.exe
