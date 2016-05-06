@@ -1,5 +1,5 @@
 var _ = require('lodash');
-var async = require('async');
+var async = require('async-q');
 var config = require('config');
 var cron = require('cron');
 var fs = require('fs');
