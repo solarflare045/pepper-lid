@@ -84,10 +84,11 @@ function readPage(pageToken) {
   });
 }
 
+var queue = async.queue(doWork, 1);
 var job = new cron.CronJob({
   cronTime: config.get('cron.frequency'),
   onTick: function() {
-    doWork();
+    queue.push({});
   },
   start: true,
   runOnInit: true
