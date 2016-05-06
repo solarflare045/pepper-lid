@@ -18,11 +18,15 @@ function doWork() {
   return readPage()
     .then(function(videos) {
       return async.eachSeries(videos, function(video) {
-        var stats = fs.statSync(path.join(config.get('destination'), video.title + '.mp3'));
-        if (stats.isFile())
+        var fileName = video.videoId + '.mp3';
+        try {
+          fs.statSync(path.join(config.get('destination'), fileName));
           return;
+        } catch (err) {
+          // If you reached here, the file does not exist.
+        }
 
-        winston.info('Downloading %s [%s]...', video.title, video.videoId);
+        winston.info('Downloading %s [%s]...', video.title, fileName);
 
         return new Promise(function(resolve, reject) {
           var YD = new youtube({
@@ -32,7 +36,7 @@ function doWork() {
           });
 
           YD.on('finished', function(data) {
-            winston.info('Downloaded %s.', video.title);
+            winston.info('Downloaded %s.', fileName);
             return resolve(data);
           });
 
@@ -40,7 +44,7 @@ function doWork() {
             return reject(error);
           });
 
-          YD.download(video.videoId);
+          YD.download(video.videoId, fileName);
         });
       });
     })
@@ -80,11 +84,10 @@ function readPage(pageToken) {
   });
 }
 
-var queue = async.queue(doWork, 1);
 var job = new cron.CronJob({
   cronTime: config.get('cron.frequency'),
   onTick: function() {
-    queue.push();
+    doWork();
   },
   start: true,
   runOnInit: true
