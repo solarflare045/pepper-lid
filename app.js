@@ -74,10 +74,10 @@ function readPage(pageToken) {
       };
     });
 
-    if (!results.pageInfo.nextPageToken)
+    if (!results.nextPageToken)
       return videos;
 
-    return readPage(results.pageInfo.nextPageToken)
+    return readPage(results.nextPageToken)
       .then(function(more) {
         return _.concat(videos, more);
       });

@@ -1,6 +1,6 @@
 {
   "name": "pepper-lid",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Downloads your YouTube playlist to disc as MP3",
   "main": "app.js",
   "scripts": {
